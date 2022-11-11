@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <script src="{% static 'js/algorithms.js' %}"></script>
+    <title>a;slkjdf</title>
+</head>
+<body>
+    <label for="frames">Number of frames: </label>
+    
+    <input type="text" name="frames" id="frames">
+
+    <br>
+
+    <label for="algo">Page Replacement Algorithm: </label>
+
+    <select name="algorithm" id="algo">
+        <option value="FIFO">First in First out (FIFO)</option>
+        <option value="LRU">Least Recently used (LRU)</option>
+        <option value="OPT">Optimal (OPT)</option>
+    </select>
+
+    <br>
+
+    <label for="refstr">Reference String: </label>
+
+    <br>
+    <textarea name="ref_string" id="refstr" cols="50" rows="5"></textarea>
+    <button onclick = "display()">SUBMIT</button>
+    <br>
+    <hr>
+    <div class="parent" id="id_parent" >
+        
+    </div>
+</body>
+
+</html>
