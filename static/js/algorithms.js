@@ -1,4 +1,20 @@
-function firstinfirstout_code()
+function table_insertion(frame_length,page_set)
+{
+    for(var j = 0; j<frame_length; j++)
+    {
+        var table = document.getElementById("table-"+i).children[0].children[j];
+        console.log(table);
+        if(page_set[j] == undefined)
+        {
+            table.innerHTML= "\u00A0";
+        }
+        else{
+            table.innerHTML = page_set[j];
+        }
+    }
+
+}
+function firstinfirstout()
 { //firstinfirst out algorithm prototype working  
     let frame_length = document.getElementById("frames").value;//input - number of frames
     frame_length = parseFloat(frame_length);
@@ -10,7 +26,6 @@ function firstinfirstout_code()
     var queue = [];
     for(var i = 0; i<length; i++)
     { 
-        //console.log(page_set+"\n");
         if(page_set.length < frame_length)
         {
             if(!page_set.includes(parseFloat(reference_string[i])))
@@ -41,29 +56,13 @@ function firstinfirstout_code()
             }
         }
         output_array.push(page_set);
-        //console.log(page_set);
-        for(var j = 0; j<frame_length; j++)
-        {
-            var table = document.getElementById("table-"+i).children[0].children[j];
-            console.log(table);
-            if(page_set[j] == undefined)
-            {
-                table.innerHTML= "\u00A0";
-            }
-            else{
-                table.innerHTML = page_set[j];
-            }
-
-            // if(j == frame_length-1)
-            // {
-            //     table.insertAdjacentHTML("beforebegin",`<tr> ${reference_string[i]}</tr>`);
-            // }
-        }
+        //inserting final data into table
+        table_insertion(frame_length,page_set);
+        
     }
-    //document.write("<br>"q+output_array+"<br>");
 
 }
-function firstinfirstout_table_generator()
+function table_generator()
 {
     
     document.getElementById("id_parent").innerHTML = "";//clearing the contents of previous output
@@ -87,22 +86,15 @@ function firstinfirstout_table_generator()
         
     }
     rs_table.style.display = "inline-block";
-    // rs_table.style.paddingRight = "1px";
-    // rs_table.style.padding = "1px";
     rs_table.setAttribute("border","1");
     rs_table.style.border = "0px solid black";
     rs_table.style.borderCollapse = "collapse";
     rs_table.style.borderStyle = "dotted";
     rs_table_div.appendChild(rs_table);
     parent.appendChild(rs_table_div);
-    
 
-    
     for(var j = 0; j<length; j++)//loop for each table  
     {
-        
-        
-        
         var x = document.createElement("table");
         x.setAttribute("id","table-"+j);
         x.setAttribute("border","0");
@@ -113,9 +105,6 @@ function firstinfirstout_table_generator()
         // x.style.paddingRight = "10px";
         x.style.padding = "10px";
         x.style.paddingInline = "11px";
-        
-        
-        
         
         for(var i = 1; i<=frames; i++)//loop for each row
         {
@@ -130,17 +119,22 @@ function firstinfirstout_table_generator()
         parent.appendChild(x)
         //document.querySelector(".table-"+j+" .row-2").style.background = "red";   
     }
-    firstinfirstout_code();
+    var element = document.getElementById("algo");
+    if(element.value() == "FIFO")
+    {
+        firstinfirstout();
+    }
+    else if(element.value == "LRU")
+    {
+        //leastrecentlyused();
+    }
+    else if(element.value == "OPT")
+    {
+        //optimal();
+    }
     
 }
 function display()
 {
-    var element = document.getElementById("algo");
-    if(element.value == "FIFO")
-    {
-        firstinfirstout_table_generator();
-    }
-    else{
-        alert("another option")
-    }
+    table_generator();
 }
