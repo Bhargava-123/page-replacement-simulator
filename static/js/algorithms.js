@@ -1,4 +1,4 @@
-function table_insertion(frame_length,page_set)
+function table_insertion(frame_length,page_set,i)
 {
     for(var j = 0; j<frame_length; j++)
     {
@@ -57,10 +57,47 @@ function firstinfirstout()
         }
         output_array.push(page_set);
         //inserting final data into table
-        table_insertion(frame_length,page_set);
+        table_insertion(frame_length,page_set,i);
         
     }
 
+}
+function leastrecentlyused()
+{
+    var frame_length = document.getElementById("frames").value;;
+    var page_set = [];
+    var usage_list = [];
+    var output_array = [];
+    let reference_string = document.getElementById("refstr").value;
+    for(var i = 0; i<reference_string.length; i++)
+    {
+        if(!page_set.includes(reference_string[i]))
+        {
+            if(page_set.length < frame_length)
+            {
+                usage_list.push(reference_string[i]);
+                page_set.push(reference_string[i]);
+            }
+            else
+            {
+                page_set[page_set.indexOf(usage_list[0])] = reference_string[i];
+                usage_list.shift();
+                usage_list.push(reference_string[i]);
+            }
+            var index = page_set.indexOf(reference_string[i]);
+            document.getElementById("table-"+i).children[0].children[index].style.background = "red";
+        }
+        else
+        {   
+            usage_list.shift();
+            usage_list.push(reference_string[i]);
+            var index = page_set.indexOf(reference_string[i]);
+            document.getElementById("table-"+i).children[0].children[index].style.background = "green";
+        }
+        output_array.push(page_set);
+        console.log(page_set);  
+        table_insertion(frame_length,page_set,i);
+    }
 }
 function table_generator()
 {
@@ -120,13 +157,13 @@ function table_generator()
         //document.querySelector(".table-"+j+" .row-2").style.background = "red";   
     }
     var element = document.getElementById("algo");
-    if(element.value() == "FIFO")
+    if(element.value == "FIFO")
     {
         firstinfirstout();
     }
     else if(element.value == "LRU")
     {
-        //leastrecentlyused();
+        leastrecentlyused();
     }
     else if(element.value == "OPT")
     {
