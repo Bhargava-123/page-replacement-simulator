@@ -3,7 +3,7 @@ function table_insertion(frame_length,page_set,i)
     for(var j = 0; j<frame_length; j++)
     {
         var table = document.getElementById("table-"+i).children[0].children[j];
-        console.log(table);
+        // console.log(table);
         if(page_set[j] == undefined)
         {
             table.innerHTML= "\u00A0";
@@ -99,6 +99,45 @@ function leastrecentlyused()
         table_insertion(frame_length,page_set,i);
     }
 }
+function optimal()
+{
+    var frame_length = document.getElementById("frames").value;;
+    var page_set = [];
+    var output_array = [];
+    let reference_string = document.getElementById("refstr").value;
+    for(var i =0; i<reference_string.length; i++)
+    {
+        if(!page_set.includes(reference_string[i]))
+        {
+            if(page_set.length < frame_length)
+            {
+                page_set.push(reference_string[i]);
+            }
+            else
+            {
+                var forward_list = reference_string.slice(i+1,reference_string.length);
+                console.log(forward_list);
+                var max  = 0;
+                var max_page;
+                for(var j = 0; j < frames; j++)
+                {
+                    if(forward_list.indexOf(page_set[j]) > max)
+                    {
+                        max = forward_list.indexOf(page_set[j]);
+                        max_page = page_set[j];
+                    }
+                }
+                page_set[page_set.indexOf(max_page)] = reference_string[i]; 
+                
+            }
+        }
+        console.log(page_set);
+        
+
+    }
+    
+
+}
 function table_generator()
 {
     
@@ -167,7 +206,7 @@ function table_generator()
     }
     else if(element.value == "OPT")
     {
-        //optimal();
+        optimal();
     }
     
 }
