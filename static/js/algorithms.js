@@ -12,7 +12,6 @@ function table_insertion(frame_length,page_set,i)
             table.innerHTML = page_set[j];
         }
     }
-
 }
 function firstinfirstout()
 { //firstinfirst out algorithm prototype working  
@@ -55,6 +54,7 @@ function firstinfirstout()
                 document.getElementById("table-"+i).children[0].children[index].style.background = "green";
             }
         }
+        console.log(page_set);
         output_array.push(page_set);
         //inserting final data into table
         table_insertion(frame_length,page_set,i);
@@ -80,22 +80,35 @@ function leastrecentlyused()
             }
             else
             {
-                page_set[page_set.indexOf(usage_list[0])] = reference_string[i];
-                usage_list.shift();
-                usage_list.push(reference_string[i]);
+                var min_index;
+                var min_page;
+                min_index = usage_list.indexOf(page_set[0]);
+                for(var j = 1; j<page_set.length; j++)
+                {
+                    if(usage_list.includes(page_set[j]))
+                    {
+                        if(usage_list.indexOf(page_set[j]) < min_index)
+                        {
+                            min_index = usage_list.indexOf(page_set[j]);
+                            min_page = page_set[j];
+                        }
+                    } 
+                }
+                page_set[page_set.indexOf(min_page)] = reference_string[i];
+                usage_list.push(reference_string[i]);   
             }
             var index = page_set.indexOf(reference_string[i]);
             document.getElementById("table-"+i).children[0].children[index].style.background = "red";
         }
         else
         {   
-            usage_list.shift();
             usage_list.push(reference_string[i]);
             var index = page_set.indexOf(reference_string[i]);
             document.getElementById("table-"+i).children[0].children[index].style.background = "green";
         }
+        console.log(usage_list);  
         output_array.push(page_set);
-        console.log(page_set);  
+        
         table_insertion(frame_length,page_set,i);
     }
 }
@@ -132,11 +145,7 @@ function optimal()
             }
         }
         console.log(page_set);
-        
-
     }
-    
-
 }
 function table_generator()
 {
