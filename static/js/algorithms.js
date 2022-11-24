@@ -3,7 +3,6 @@ function table_insertion(frame_length,page_set,i)
     for(var j = 0; j<frame_length; j++)
     {
         var table = document.getElementById("table-"+i).children[0].children[j];
-        // console.log(table);
         if(page_set[j] == undefined)
         {
             table.innerHTML= "\u00A0";
@@ -64,6 +63,7 @@ function firstinfirstout()
 }
 function leastrecentlyused()
 {
+
     var frame_length = document.getElementById("frames").value;;
     var page_set = [];
     var usage_list = [];
@@ -114,13 +114,27 @@ function leastrecentlyused()
 }
 function optimal()
 {
+    console.log("optimal");
     var frame_length = document.getElementById("frames").value;;
     var page_set = [];
+    var usage_list = [];
     var output_array = [];
     let reference_string = document.getElementById("refstr").value;
+    console.log(reference_string);
+    for(var j = 0; j<reference_string.length; j++)
+    {
+        usage_list.push(reference_string[j]);
+    }
+    console.log(usage_list);     
+    //algo
     for(var i =0; i<reference_string.length; i++)
     {
-        if(!page_set.includes(reference_string[i]))
+        if(page_set.includes(reference_string[i]))
+        {
+            var index = page_set.indexOf(reference_string[i]);
+            document.getElementById("table-"+i).children[0].children[index].style.background = "green";
+        }
+        else
         {
             if(page_set.length < frame_length)
             {
@@ -128,25 +142,36 @@ function optimal()
             }
             else
             {
-                var forward_list = reference_string.slice(i+1,reference_string.length);
-                console.log(forward_list);
-                var max  = 0;
-                var max_page;
-                for(var j = 0; j < frames; j++)
+                var j = -1;fathest = i+1;
+                for(var a = 0; a<frame_length; a++)
                 {
-                    if(forward_list.indexOf(page_set[j]) > max)
+                    for(var b = i+1; b<frame_length; b++)
                     {
-                        max = forward_list.indexOf(page_set[j]);
-                        max_page = page_set[j];
+                        if(page_set[a] == reference_string[b])
+                        {
+                            if(b > farthest)
+                            {
+                                farthest = b;
+                                j = a;
+                            }
+                            break;
+                        }
+                    }
+                    if(b = frame_length)
+                    {
+                        j = a;
                     }
                 }
-                page_set[page_set.indexOf(max_page)] = reference_string[i]; 
+                page_set[j] = reference_string[i];
                 
             }
         }
-        console.log(page_set);
+        output_array.push(page_set); 
+        table_insertion(frame_length,page_set,i);
     }
+        
 }
+    
 function table_generator()
 {
     
