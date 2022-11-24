@@ -13,12 +13,11 @@ function table_insertion(frame_length,page_set,i)
     }
 }
 function firstinfirstout()
-{ //firstinfirst out algorithm prototype working  
+{ 
     let frame_length = document.getElementById("frames").value;//input - number of frames
     frame_length = parseFloat(frame_length);
     let reference_string = document.getElementById("refstr").value;//input - reference string
     var length = reference_string.length;
-    var page_fault = -1;
     var output_array = []
     var page_set = [];
     var queue = [];
@@ -29,7 +28,6 @@ function firstinfirstout()
             if(!page_set.includes(parseFloat(reference_string[i])))
             {
                 page_set.push(parseFloat(reference_string[i]));
-                page_fault = page_fault + 1;
                 queue.push(parseFloat(reference_string[i]));    
                 var index = page_set.indexOf(parseFloat(reference_string[i]));
                 document.getElementById("table-"+i).children[0].children[index].style.background = "red";
@@ -44,7 +42,6 @@ function firstinfirstout()
                 //to replace an element
                 page_set[page_set.map((x,i) => [i,x]).filter(x => x[1] == val)[0][0]] = parseFloat(reference_string[i]);
                 queue.push(parseFloat(reference_string[i]));
-                page_fault = page_fault + 1;
                 var index = page_set.indexOf(parseFloat(reference_string[i]));
                 document.getElementById("table-"+i).children[0].children[index].style.background = "red";
             }
@@ -57,13 +54,10 @@ function firstinfirstout()
         output_array.push(page_set);
         //inserting final data into table
         table_insertion(frame_length,page_set,i);
-        
     }
-
 }
 function leastrecentlyused()
 {
-
     var frame_length = document.getElementById("frames").value;;
     var page_set = [];
     var usage_list = [];
@@ -108,9 +102,36 @@ function leastrecentlyused()
         }
         console.log(usage_list);  
         output_array.push(page_set);
-        
         table_insertion(frame_length,page_set,i);
     }
+}
+function predict(pg,fr,pn,index,frame_length)
+{
+    // Store the index of pages which are going
+    // to be used recently in future
+    var res = -1, farthest = index;
+    for (var i = 0; i < frame_length; i++) {
+        var j;
+        for (j = index; j < pn; j++) {
+            if (fr[i] == pg[j]) {
+                if (j > farthest) {
+                    farthest = j;
+                    res = i;
+                }
+                break;
+            }
+        }
+ 
+        // If a page is never referenced in future,
+        // return it.
+        if (j == pn)
+            return i;
+    }
+ 
+    // If all of the frames were not in future,
+    // return any of them, we return 0. Otherwise
+    // we return res.
+    return (res == -1) ? 0 : res;
 }
 function optimal()
 {
@@ -126,7 +147,6 @@ function optimal()
         usage_list.push(reference_string[j]);
     }
     console.log(usage_list);     
-    //algo
     for(var i =0; i<reference_string.length; i++)
     {
         if(page_set.includes(reference_string[i]))
@@ -142,47 +162,25 @@ function optimal()
             }
             else
             {
-                var j = -1;fathest = i+1;
-                for(var a = 0; a<frame_length; a++)
-                {
-                    for(var b = i+1; b<frame_length; b++)
-                    {
-                        if(page_set[a] == reference_string[b])
-                        {
-                            if(b > farthest)
-                            {
-                                farthest = b;
-                                j = a;
-                            }
-                            break;
-                        }
-                    }
-                    if(b = frame_length)
-                    {
-                        j = a;
-                    }
-                }
+                var j = predict(reference_string,page_set,reference_string.length,i+1,frame_length);
                 page_set[j] = reference_string[i];
-                
+                var index = page_set.indexOf(reference_string[i]);
+                document.getElementById("table-"+i).children[0].children[index].style.background = "green";
             }
         }
+        
         output_array.push(page_set); 
         table_insertion(frame_length,page_set,i);
     }
-        
 }
-    
 function table_generator()
 {
     
     document.getElementById("id_parent").innerHTML = "";//clearing the contents of previous output
-    
     let frames = document.getElementById("frames").value;//input - number of frames
     frames = parseFloat(frames);
-
     let reference_string = document.getElementById("refstr").value;//input - reference string
     var length = reference_string.length;
-
     var parent = document.getElementById("id_parent");
     var rs_table = document.createElement("table")
     let rs_table_row = rs_table.insertRow(-1);
@@ -202,7 +200,6 @@ function table_generator()
     rs_table.style.borderStyle = "dotted";
     rs_table_div.appendChild(rs_table);
     parent.appendChild(rs_table_div);
-
     for(var j = 0; j<length; j++)//loop for each table  
     {
         var x = document.createElement("table");
@@ -215,12 +212,10 @@ function table_generator()
         // x.style.paddingRight = "10px";
         x.style.padding = "10px";
         x.style.paddingInline = "11px";
-        
         for(var i = 1; i<=frames; i++)//loop for each row
         {
             var text;
             text = document.createTextNode("row "+i);
-            
             const row = x.insertRow(-1);
             row.setAttribute("id","row-"+(i-1));
             const data = row.insertCell(-1);
