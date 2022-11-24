@@ -107,8 +107,6 @@ function leastrecentlyused()
 }
 function predict(pg,fr,pn,index,frame_length)
 {
-    // Store the index of pages which are going
-    // to be used recently in future
     var res = -1, farthest = index;
     for (var i = 0; i < frame_length; i++) {
         var j;
@@ -121,16 +119,9 @@ function predict(pg,fr,pn,index,frame_length)
                 break;
             }
         }
- 
-        // If a page is never referenced in future,
-        // return it.
         if (j == pn)
             return i;
     }
- 
-    // If all of the frames were not in future,
-    // return any of them, we return 0. Otherwise
-    // we return res.
     return (res == -1) ? 0 : res;
 }
 function optimal()
@@ -165,7 +156,7 @@ function optimal()
                 var j = predict(reference_string,page_set,reference_string.length,i+1,frame_length);
                 page_set[j] = reference_string[i];
                 var index = page_set.indexOf(reference_string[i]);
-                document.getElementById("table-"+i).children[0].children[index].style.background = "green";
+                document.getElementById("table-"+i).children[0].children[index].style.background = "red";
             }
         }
         
