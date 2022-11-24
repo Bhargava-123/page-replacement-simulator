@@ -1,8 +1,23 @@
 #hell{
     background-color: red;
 }
+h1{
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+    background-color: antiquewhite;
+
+}
 .parent
 {
     position: relative;
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: large;
 
+}
+.red
+{
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
 }
